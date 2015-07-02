@@ -148,6 +148,7 @@
 		border-radius: 12px;
 		transition: top 0.5s ease-in-out;
 		overflow: hidden;
+		z-index: 1000;
 	}
 		#text img {
 			float: left;
@@ -159,6 +160,26 @@
 		#text p {
 			float: left;
 			margin-left: 30px;
+		}
+
+	#timer {
+		z-index: 1000;
+		position: absolute;
+		top: 20px;
+		right: 20px;
+		width: 300px;
+		height: 20px;
+		border: 1px solid #333;
+		box-shadow: 0 0 3px #000;
+		background: white;
+		border-radius: 12px;
+		overflow: hidden;
+	}
+		#timer-inner {
+			background: red;
+			width: 0%;
+  			height: 100%;
+			border-radius: 12px;
 		}
 
 	.concierge-event {
@@ -233,6 +254,30 @@
 		  width: 74px;
 		  height: 79px;
 	}
+	.help-outside-event {
+		  left: 561px;
+		  top: 208px;
+		  width: 63px;
+		  height: 73px;
+	}
+	.rooster-up-event {
+		 left: 566px;
+		  top: 290px;
+		  width: 68px;
+		  height: 83px;
+	}
+	.computer-room-event {
+		    left: 918px;
+		  top: 390px;
+		  width: 72px;
+		  height: 73px;
+	}
+	.help-stairs-event {
+		    left: 621px;
+		  top: 415px;
+		  width: 63px;
+		  height: 73px;
+	}
 
 	</style>
 </head>
@@ -250,6 +295,7 @@
 	<!-- Level 1 -->
 	<div data-conversation="concierge_door" class="concierge-event event"></div>
 	<div data-conversation="door_closed" class="door-event event"></div>
+	<div data-conversation="help_outside" class="help-outside-event event"></div>
 
 	<!-- Level 2 -->
 	<div data-conversation="exit" class="exit-event event"></div>
@@ -263,10 +309,17 @@
 	<div data-conversation="stairs_down" class="stairs-down-event event"></div>
 	<div data-conversation="empty_class_door" class="empty-class-door-event event"></div>
 	<div data-conversation="empty_class" class="empty-class-event event"></div>
+	<div data-conversation="help_stairs" class="help-stairs-event event"></div>
+	<div data-conversation="computer_room" class="computer-room-event event"></div>
+	<div data-conversation="rooster_up" class="rooster-up-event event"></div>
 
 	<div id="text">
 		<img src="img/student_icon.png" alt="">
 		<p>Hello World</p>
+	</div>
+
+	<div id="timer" data-conversation="timer" class="timer-event">
+		<div id="timer-inner"></div>
 	</div>
 
 </div>
@@ -277,9 +330,16 @@
 
 	var eventId;
 	var alertShowing;
+	var minutes;
+	var seconds;
+	var interval;
+	var late = false;
 
 	$(document).on('ready', function() {
 		loadLevel('level1');
+		eventId = 'start';
+		showText();
+		startTimer(60 * 0.5);
 	});
 
 	$(document).on('click', '.event', function(e) {
@@ -293,6 +353,8 @@
 			$('.door-event').data('conversation', 'door');
 		} else if(eventId == 'stairs') {
 			conversations['stairs'].nextEvent = undefined;
+		} else if(eventId == 'empty_class' || eventId == 'empty_class_door') {
+			$('.concierge-2-event').data('conversation', 'concierge_3');
 		}
 	});
 
@@ -328,6 +390,9 @@
 			$('.empty-class-door-event').show();
 			$('.empty-class-event').show();
 			$('.stairs-down-event').show();
+			$('.computer-room-event').show();
+			$('.help-stairs-event').show();
+			$('.rooster-up-event').show();
 		} else if(level == 'level2') {
 			$('.event').hide();
 
@@ -342,6 +407,7 @@
 
 			$('.door-event').show();
 			$('.concierge-event').show();
+			$('.help-outside-event').show();
 		}
 
 		$('#container img').hide();
@@ -383,6 +449,41 @@
 		$('#text').css('top', '-200px');
 	}
 
+	function startTimer(duration) {
+	    var timer = 0;
+	    var reverseTimer = duration
+	    interval = setInterval(function () {
+	        if (++timer > duration) {
+	            clearInterval(interval);
+
+	            eventId = 'late';
+	            late = true;
+				$('.concierge-2-event').data('conversation', 'concierge_late');
+	            
+	            showText();
+	        }
+	        if(--reverseTimer < 0) {
+	        	clearInterval(interval);
+	            eventId = 'late';
+	            late = true;
+				$('.concierge-2-event').data('conversation', 'concierge_late');
+	            
+	        	showText();
+	        }
+
+
+
+	        minutes = parseInt(timer / 60, 10);
+	        seconds = parseInt(timer % 60, 10);
+
+	        var percentage = timer / duration * 100;
+
+	        $('#timer-inner').css('width', percentage + '%');
+
+	        console.log(seconds);
+	    }, 1000);
+	}
+
 var events = [
 	{ 
 		x: 731,
@@ -401,9 +502,36 @@ var events = [
 ];
 
 var conversations = {
+	start: {
+		icon: 'img/student_icon.png',
+		text: "Een nieuwe schooldag begint."
+	},
+	timer: {
+		icon: 'img/student_icon.png',
+		text: "De les begint over."
+	},
+	late: {
+		icon: 'img/student_icon.png',
+		text: "Ik ben te laat, ik moet een te laat briefje halen."
+	},
+	help_outside: {
+		icon: 'img/help.png',
+		text: "Zoek de conciërge als de deur op slot zit."
+	},
 	concierge_door: {
 		icon: 'img/concierge.png',
 		text: "Zit de deur op slot? Ik zal hem even open maken."
+	},
+	concierge_late: {
+		icon: 'img/concierge.png',
+		text: "Ben je te laat?",
+		options: [
+			{ text: "Ja, de les is al begonnen.", nextEvent: 'concierge_confirm' }
+		]
+	},
+	concierge_confirm: {
+		icon: 'img/concierge.png',
+		text: "Hier heb je een te laat briefje, ga maar snel naar de les."
 	},
 	door_closed: {
 		icon: 'img/student_icon.png',
@@ -438,6 +566,15 @@ var conversations = {
 			{ text: "12 uur: Aardrijkskunde in lokaal 303." }
 		]
 	},
+	rooster_up: {
+		icon: 'img/rooster.png',
+		text: "Rooster",
+		options: [
+			{ text: "10 uur: Wiskunde in lokaal 301" },
+			{ text: "11 uur: Nederlands in lokaal 302" },
+			{ text: "12 uur: Aardrijkskunde in lokaal 303." }
+		]
+	},
 	stairs: {
 		icon: 'img/student_icon.png',
 		text: "Zal ik naar boven gaan?",
@@ -457,6 +594,14 @@ var conversations = {
 	help: {
 		icon: 'img/help.png',
 		text: "Gebruik de trap om naar boven te gaan.",
+	},
+	help_stairs: {
+		icon: 'img/help.png',
+		text: "Gebruik de trap om naar beneden te gaan.",
+	},
+	computer_room: {
+		icon: 'img/help.png',
+		text: "In de computer ruimte kan je je huiswerk maken.",
 	},
 	concierge_2: {
 		icon: 'img/concierge.png',
