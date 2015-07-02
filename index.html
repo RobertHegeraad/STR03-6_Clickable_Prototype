@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Prototype Ambient & Pervasive Design</title>
+
+	<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+
+	<style>
+	* {
+		margin: 0;
+		padding: 0;
+	}
+	
+	.btn {
+	    display: block;
+	    margin-top: 10px;
+	    margin-bottom: 10px;
+	    background-color: #f5f5f5;
+	    background-image: -webkit-linear-gradient(top,#f5f5f5,#f1f1f1);
+	    background-image: -moz-linear-gradient(top,#f5f5f5,#f1f1f1);
+	    background-image: -ms-linear-gradient(top,#f5f5f5,#f1f1f1);
+	    background-image: -o-linear-gradient(top,#f5f5f5,#f1f1f1);
+	    background-image: linear-gradient(top,#f5f5f5,#f1f1f1);
+	    color: #444;
+
+	    position: relative;
+	    
+	    border: 1px solid #dcdcdc;
+	    -webkit-border-radius: 2px;
+	    -moz-border-radius: 2px;
+	    border-radius: 2px;
+	    
+	    cursor: default;
+	    font-size: 14px;
+	    font-weight: bold;
+	    text-align: left;
+	    height: 27px;
+	    line-height: 27px;
+	    min-width: 54px;
+	    padding: 0 8px;
+	    text-decoration: none;
+	}
+
+	.btn:active {
+		background-color: #4D90FE;
+	    background-image: -webkit-linear-gradient(top,#4d90fe,#4787ed);
+	    background-image: -moz-linear-gradient(top,#4d90fe,#4787ed);
+	    background-image: -ms-linear-gradient(top,#4d90fe,#4787ed);
+	    background-image: -o-linear-gradient(top,#4d90fe,#4787ed);
+	    background-image: linear-gradient(top,#4d90fe,#4787ed);
+
+	    border: 1px solid #3079ED;
+	    color: white;
+
+	    -webkit-box-shadow: inset 0px 1px 2px rgba(0,0,0,.1);
+	    -moz-box-shadow: inset 0px 1px 2px rgba(0,0,0,.1);
+	    box-shadow: inset 0px 1px 2px rgba(0,0,0,.1);
+	}
+	html {
+		height: 100%;
+	}
+	body {
+		width: 100%;
+		height: 100%;
+		font-family: 'Roboto', sans-serif;
+	}
+	ul,ol {
+		list-style: none;
+		clear: both;
+		margin-top: 40px;
+	}
+	li {
+		padding: 8px;
+		font-size: 16px;
+		color: #aaa;
+	}
+	li:active {
+		background: #f9f9f9;
+	}
+	#container {
+		width: 1000px;
+		height: 707px;
+		/*margin: 0 auto;*/
+
+		position: relative;
+
+/*		background-image: url('img/PaperPrototypeLevel1.png');
+		background-size: cover;
+		background-repeat: no-repeat;*/
+
+		box-shadow: 0 0 3px #000;
+
+		/*cursor: url('img/student_icon.png'), auto;*/
+	}
+		#container img {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+		.level1 {
+			/*display: none;*/
+		}
+		.level2 {
+			display: none;
+		}
+		.level3 {
+			display: none;
+		}
+
+	.event {
+		background: rgba(0,0,255,0.5);
+		position: absolute;
+	}
+
+	#player {
+		width: 48px;
+		height: 48px;
+		background-image: url('img/student_icon.png');
+		background-repeat: no-repeat;
+		position: absolute;
+		display: none;
+		left: 500px;
+		top: 300px;
+	}
+
+	#alert {
+		width: 36px;
+		height: 36px;
+		display: none;
+		position: absolute;
+		background-image: url('img/alert.png');
+		background-repeat: no-repeat;
+	}
+
+	#text {
+		border: 1px solid #dbdbdb;
+		background: white;
+		padding: 16px 30px;
+		font-size: 20px;
+		box-shadow: 0 0 3px #000;
+		/*display: none;*/
+		position: fixed;
+		top: -200px;
+		left: 20px;
+		border-radius: 12px;
+		transition: top 0.5s ease-in-out;
+		overflow: hidden;
+	}
+		#text img {
+			float: left;
+			width: 40px;
+			height: 40px;
+			margin-top: 10px;
+			margin-left: 10px;
+		}
+		#text p {
+			float: left;
+			margin-left: 30px;
+		}
+
+	.concierge-event {
+		left: 731px;
+		  top: 334px;
+		  width: 39px;
+		  height: 68px;
+	}
+	.door-event {
+		left: 503px;
+		  top: 142px;
+		  width: 39px;
+		  height: 68px;
+	}
+
+
+
+	.exit-event {
+		  left: 443px;
+		  top: 665px;
+		  width: 114px;
+		  height: 43px;
+	}
+	.stairs-event {
+		  left: 500px;
+		  top: 357px;
+		  width: 119px;
+		  height: 122px;
+	}
+	.rooster-event {
+		    left: 794px;
+			  top: 363px;
+			  width: 47px;
+			  height: 97px;
+	}
+	.help-event {
+		  left: 623px;
+		  top: 359px;
+		  width: 52px;
+		  height: 60px;
+	}
+	.concierge-2-event {
+		    left: 689px;
+		  top: 594px;
+		  width: 47px;
+		  height: 83px;
+	}
+	.ferry-event {
+		   left: 793px;
+		  top: 98px;
+		  width: 47px;
+		  height: 83px;
+	}
+
+
+
+	.empty-class-door-event {
+		    left: 357px;
+		  top: 359px;
+		  width: 52px;
+		  height: 60px;
+	}
+	.empty-class-event {
+		  left: 0px;
+		  top: 408px;
+		  width: 508px;
+		  height: 300px;
+	}
+	.stairs-down-event {
+		  left: 627px;
+		  top: 490px;
+		  width: 74px;
+		  height: 79px;
+	}
+
+	</style>
+</head>
+<body>
+
+
+<div id="container">
+	
+	<img class="level3" src="img/PaperPrototypeLevel3.png" alt="">
+	<img class="level2" src="img/PaperPrototypeLevel2.png" alt="">
+	<img class="level1" src="img/PaperPrototypeLevel1.png" alt="">
+
+	<div id="player"></div>
+
+	<!-- Level 1 -->
+	<div data-conversation="concierge_door" class="concierge-event event"></div>
+	<div data-conversation="door_closed" class="door-event event"></div>
+
+	<!-- Level 2 -->
+	<div data-conversation="exit" class="exit-event event"></div>
+	<div data-conversation="stairs" class="stairs-event event"></div>
+	<div data-conversation="rooster" class="rooster-event event"></div>
+	<div data-conversation="help" class="help-event event"></div>
+	<div data-conversation="concierge_2" class="concierge-2-event event"></div>
+	<div data-conversation="ferry" class="ferry-event event"></div>
+
+	<!-- Level 3 -->
+	<div data-conversation="stairs_down" class="stairs-down-event event"></div>
+	<div data-conversation="empty_class_door" class="empty-class-door-event event"></div>
+	<div data-conversation="empty_class" class="empty-class-event event"></div>
+
+	<div id="text">
+		<img src="img/student_icon.png" alt="">
+		<p>Hello World</p>
+	</div>
+
+</div>
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+
+	var eventId;
+	var alertShowing;
+
+	$(document).on('ready', function() {
+		loadLevel('level1');
+	});
+
+	$(document).on('click', '.event', function(e) {
+		console.log('event triggered');
+		eventId = $(this).data('conversation');
+
+		showText();
+
+		if(eventId == 'concierge_door') {
+			conversations['concierge_door'].text = "De deur is open";
+			$('.door-event').data('conversation', 'door');
+		} else if(eventId == 'stairs') {
+			conversations['stairs'].nextEvent = undefined;
+		}
+	});
+
+	$(document).on('click', '#options li', function(e) {
+		hideText();
+		var $this = $(this);
+		var level = $this.data('load');
+		var from = $this.data('from');
+		var to = $this.data('to');
+		var nextEvent = $this.data('nextevent');
+
+		if(level !== 'undefined') {
+			loadLevel(level);
+
+			if(from !== 'undefined' && to !== 'undefined') {
+				console.log(from);
+				conversations[from].text = conversations[to].text;
+			}
+		}
+
+		if(nextEvent !== 'undefined') {
+			setTimeout(function() {
+					eventId = nextEvent;
+					showText();
+			}, 1000);
+		}
+	});
+
+	function loadLevel(level) {
+		if(level == 'level3') {
+			$('.event').hide();
+			
+			$('.empty-class-door-event').show();
+			$('.empty-class-event').show();
+			$('.stairs-down-event').show();
+		} else if(level == 'level2') {
+			$('.event').hide();
+
+			$('.exit-event').show();
+			$('.stairs-event').show();
+			$('.rooster-event').show();
+			$('.concierge-2-event').show();
+			$('.help-event').show();
+			$('.ferry-event').show();
+		} else {
+			$('.event').hide();
+
+			$('.door-event').show();
+			$('.concierge-event').show();
+		}
+
+		$('#container img').hide();
+		$('.' + level).show();
+	}
+
+	var timeout;
+	function showText() {
+
+		var message = conversations[eventId].text;
+		var icon = conversations[eventId].icon;
+		if(text != undefined) {
+			
+			var html = '<img src="' + icon + '" alt="">';
+				html += '<p>' + message + '</p>';
+			
+			if(conversations[eventId].options != undefined) {
+				html += '<ul id="options">';
+				console.log(eventId);
+				for(var i=0; i<conversations[eventId].options.length; i++) {
+					console.log(conversations[eventId].options[i].nextEvent);
+					html += '<li class="btn" data-nextEvent="' + conversations[eventId].options[i].nextEvent + '" data-load="' + conversations[eventId].options[i].load + '" data-from="' + conversations[eventId].options[i].from + '" data-to="' + conversations[eventId].options[i].to + '">';
+					html += conversations[eventId].options[i].text;
+					html += '</li>';
+				}
+				html += '</ul>';
+			}
+			$('#text').html(html).css('top', (20) + 'px').show();	// fixed
+			// $('#text').html(html).css('top', (20 + $(window).scrollTop()) + 'px').show();	// absolute
+
+			clearTimeout(timeout);
+			timeout = setTimeout(function() {
+				hideText();
+			}, 10000);
+		}
+	}
+
+	function hideText() {
+		$('#text').css('top', '-200px');
+	}
+
+var events = [
+	{ 
+		x: 731,
+		  y: 334,
+		  width: 39,
+		  height: 68,
+		id: 'concierge_door'
+	},
+	{ 
+		x: 503,
+		  y: 142,
+		  width: 39,
+		  height: 68,
+		id: 'door'
+	}
+];
+
+var conversations = {
+	concierge_door: {
+		icon: 'img/concierge.png',
+		text: "Zit de deur op slot? Ik zal hem even open maken."
+	},
+	door_closed: {
+		icon: 'img/student_icon.png',
+		text: "De deur is gesloten, misschien kan iemand hem voor me openmaken.",
+	},
+	door: {
+		icon: 'img/student_icon.png',
+		text: "Zal ik naar binnen gaan?",
+		options: [
+			{ text: "Ja, de les begint zo.", load: 'level2', nextEvent: 'findSchedule' },
+			{ text: "Nee, ik blijf nog even buiten" }
+		]
+	},
+	findSchedule: {
+		icon: 'img/student_icon.png',
+		text: "Wat is mijn volgende les. Misschien weet iemand waar ik het rooster kan vinden."
+	},
+	exit: {
+		icon: 'img/student_icon.png',
+		text: "Zal ik naar buiten gaan?",
+		options: [
+			{ text: "Ja.", load: 'level1' },
+			{ text: "Nee, de les begint zo." }
+		]
+	},
+	rooster: {
+		icon: 'img/rooster.png',
+		text: "Rooster",
+		options: [
+			{ text: "10 uur: Wiskunde in lokaal 301" },
+			{ text: "11 uur: Nederlands in lokaal 302" },
+			{ text: "12 uur: Aardrijkskunde in lokaal 303." }
+		]
+	},
+	stairs: {
+		icon: 'img/student_icon.png',
+		text: "Zal ik naar boven gaan?",
+		options: [
+			{ text: "Ja.", load: 'level3', nextEvent: 'wiskunde' },
+			{ text: "Nee, Ik blijf nog even beneden." }
+		]
+	},
+	wiskunde: {
+		icon: 'img/student_icon.png',
+		text: "Mijn volgende les is wiskunde in lokaal 301.",
+	},
+	ferry: {
+		icon: 'img/ferry.png',
+		text: "Kijk op het rooster om te zien wat je volgende les is.",
+	},
+	help: {
+		icon: 'img/help.png',
+		text: "Gebruik de trap om naar boven te gaan.",
+	},
+	concierge_2: {
+		icon: 'img/concierge.png',
+		text: "Zoek je het rooster? Deze kan je vinden op het bord met de letter R.",
+	},
+	concierge_3: {
+		icon: 'img/concierge.png',
+		text: "Is de docent er niet? Ga maar even huiswerk maken in de aula tot het volgende lesuur.",
+	},
+	stairs_down: {
+		icon: 'img/student_icon.png',
+		text: "Zal ik naar beneden gaan?",
+		options: [
+			{ text: "Ja.", load: 'level2' },
+			{ text: "Nee, Ik blijf nog even boven." }
+		]
+	},
+
+	empty_class: {
+		icon: 'img/student_icon.png',
+		text: "De docent is er niet, zal ik...",
+		options: [
+			{ text: "Naar de conciërge gaan.", load: 'level2', from: 'concierge_2', to: 'concierge_3' },
+			{ text: "Huiswerk maken in de aula.", load: 'level2', from: 'concierge_2', to: 'concierge_3' }
+		]
+	},
+	empty_class_door: {
+		icon: 'img/student_icon.png',
+		text: "De docent is er niet, zal ik...",
+		options: [
+			{ text: "Naar de conciërge gaan.", load: 'level2', from: 'concierge_2', to: 'concierge_3' },
+			{ text: "Huiswerk maken in de aula.", load: 'level2', from: 'concierge_2', to: 'concierge_3' }
+		]
+	}
+}
+
+</script>
+</body>
+</html>
